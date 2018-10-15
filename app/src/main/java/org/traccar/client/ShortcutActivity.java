@@ -37,6 +37,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import android.util.Log;
 
 public class ShortcutActivity extends AppCompatActivity {
 
@@ -46,6 +53,8 @@ public class ShortcutActivity extends AppCompatActivity {
     public static final String ACTION_SOS = "sos";
 
     private static final String ALARM_SOS = "sos";
+    private static final String TAG = ShortcutActivity.class.getSimpleName();
+    public String extAttribute = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,7 +154,8 @@ public class ShortcutActivity extends AppCompatActivity {
 
         Position position = new Position(
                 preferences.getString(MainFragment.KEY_DEVICE, null),
-                location, PositionProvider.getBatteryLevel(this));
+                location, PositionProvider.getBatteryLevel(this),
+                extAttribute);
 
         String request = ProtocolFormatter.formatRequest(
                 preferences.getString(MainFragment.KEY_URL, null), position, ALARM_SOS);
@@ -196,6 +206,33 @@ public class ShortcutActivity extends AppCompatActivity {
             finish();
         }
         return action != null;
+    }
+
+    private void getExtAttributeFromFile(){
+        String line = null;
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream (new File(MainFragment.KEY_ACCURACY));
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ( (line = bufferedReader.readLine()) != null )
+            {
+                stringBuilder.append(line + System.getProperty("line.separator"));
+            }
+            fileInputStream.close();
+            line = stringBuilder.toString();
+
+            bufferedReader.close();
+        }
+        catch(FileNotFoundException ex) {
+            Log.d(TAG, ex.getMessage());
+        }
+        catch(IOException ex) {
+            Log.d(TAG, ex.getMessage());
+        }
+        extAttribute=line;
     }
 
 }
