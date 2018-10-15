@@ -41,6 +41,7 @@ public class Position {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             this.mock = location.isFromMockProvider();
         }
+        this.extAttribute = "test";
     }
 
     private long id;
@@ -152,5 +153,9 @@ public class Position {
     public void setMock(boolean mock) {
         this.mock = mock;
     }
+
+    private  String extAttribute;
+    public  String getExtAttribute(){ return  extAttribute;}
+    public  void setExtAttribute(String extAttribute){ this.extAttribute = extAttribute;}
 
 }
