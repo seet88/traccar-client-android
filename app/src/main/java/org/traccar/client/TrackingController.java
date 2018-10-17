@@ -21,6 +21,14 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class TrackingController implements PositionProvider.PositionListener, NetworkManager.NetworkHandler {
 
@@ -42,6 +50,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private NetworkManager networkManager;
 
     private PowerManager.WakeLock wakeLock;
+
+    public String extAttribute = "";
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -212,6 +222,40 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 }
             }
         }, RETRY_DELAY);
+    }
+
+
+    private void getExtAttributeFromFile(){
+        String line = null;
+
+        try {
+
+            String filepath = preferences.getString(MainFragment.KEY_FILEPATH, "");
+            FileInputStream fileInputStream = new FileInputStream (new File(filepath));
+
+            Toast.makeText(context,"traccingController: "+preferences.getString(MainFragment.KEY_FILEPATH, ""),Toast.LENGTH_LONG).show();
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ( (line = bufferedReader.readLine()) != null )
+            {
+                stringBuilder.append(line + System.getProperty("line.separator"));
+            }
+            fileInputStream.close();
+            line = stringBuilder.toString();
+
+            bufferedReader.close();
+        }
+        catch(FileNotFoundException ex) {
+            Log.d(TAG, ex.getMessage());
+        }
+        catch(IOException ex) {
+            Log.d(TAG, ex.getMessage());
+        }
+        extAttribute=line;
+        Toast.makeText(context, extAttribute,Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "sss"+line,Toast.LENGTH_LONG).show();
     }
 
 }

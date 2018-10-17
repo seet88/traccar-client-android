@@ -117,6 +117,7 @@ public class ShortcutActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        Toast.makeText(this,"W SendAlarm",Toast.LENGTH_LONG).show();
         Criteria criteria = PositionProvider.getCriteria(
                 preferences.getString(MainFragment.KEY_ACCURACY, "medium"));
 
@@ -151,6 +152,8 @@ public class ShortcutActivity extends AppCompatActivity {
 
     private void sendAlarmLocation(Location location) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Toast.makeText(this,"w sendAlarmLocation",Toast.LENGTH_LONG).show();
 
         Position position = new Position(
                 preferences.getString(MainFragment.KEY_DEVICE, null),
@@ -212,7 +215,9 @@ public class ShortcutActivity extends AppCompatActivity {
         String line = null;
 
         try {
-            FileInputStream fileInputStream = new FileInputStream (new File(MainFragment.KEY_ACCURACY));
+            FileInputStream fileInputStream = new FileInputStream (new File(MainFragment.KEY_FILEPATH));
+
+            Toast.makeText(this,MainFragment.KEY_FILEPATH,Toast.LENGTH_LONG).show();
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
@@ -233,6 +238,7 @@ public class ShortcutActivity extends AppCompatActivity {
             Log.d(TAG, ex.getMessage());
         }
         extAttribute=line;
+        Toast.makeText(this,line,Toast.LENGTH_LONG).show();
     }
 
 }
