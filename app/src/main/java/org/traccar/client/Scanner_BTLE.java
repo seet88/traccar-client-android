@@ -78,8 +78,6 @@ public class Scanner_BTLE {
             mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
-
-        Toast.makeText(context,"scanLeDevice: ",Toast.LENGTH_LONG).show();
     }
 
     // Device scan callback.

@@ -52,8 +52,6 @@ public class BluetoothController {
         else {
             mBTDevicesHashMap.get(address).setRSSI(rssi);
         }
-
-        Utils.toast(context, "AddDevice:"+address);
         //adapter.notifyDataSetChanged();
     }
 
