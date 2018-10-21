@@ -149,8 +149,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         log("write", position);
         lock();
         Toast.makeText(context,"write: ",Toast.LENGTH_LONG).show();
-        //String externalAttributes = getAllExternalAttributes();
-        databaseHelper.insertPositionAsync(position ,new DatabaseHelper.DatabaseHandler<Void>() {
+        String externalAttributes = getAllExternalAttributes();
+        databaseHelper.insertPositionAsync(position, externalAttributes ,new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {
                 if (success) {

@@ -114,11 +114,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insertOrThrow("position", null, values);
     }
 
-    public void insertPositionAsync(final Position position, DatabaseHandler<Void> handler) {
+    public void insertPositionAsync(final Position position,final String externalAttributes, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                insertPosition(position, "Test");
+                insertPosition(position, externalAttributes);
                 return null;
             }
         }.execute();
