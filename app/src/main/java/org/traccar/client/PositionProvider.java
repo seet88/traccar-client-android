@@ -157,12 +157,12 @@ public class PositionProvider implements LocationListener {
             String filepath = preferences.getString(MainFragment.KEY_FILEPATH, "");
             File file = new File(filepath);
             Date fileModyficationTime = new Date(file.lastModified());
-            Toast.makeText(context, "fileModyficationTime: " + fileModyficationTime.toString(), Toast.LENGTH_LONG).show();
-            Toast.makeText(context, "fileLastCheckedTime: " + fileLastCheckedTime.toString(), Toast.LENGTH_LONG).show();
+           // Toast.makeText(context, "fileModyficationTime: " + fileModyficationTime.toString(), Toast.LENGTH_LONG).show();
+          //  Toast.makeText(context, "fileLastCheckedTime: " + fileLastCheckedTime.toString(), Toast.LENGTH_LONG).show();
             if(fileLastCheckedTime.before(fileModyficationTime)) {
                 FileInputStream fileInputStream = new FileInputStream(file);
 
-                Toast.makeText(context, "PosProvider_KEY_FILEPATH: " + preferences.getString(MainFragment.KEY_FILEPATH, "MojaTestowaSciezka"), Toast.LENGTH_LONG).show();
+             //   Toast.makeText(context, "PosProvider_KEY_FILEPATH: " + preferences.getString(MainFragment.KEY_FILEPATH, "MojaTestowaSciezka"), Toast.LENGTH_LONG).show();
                 InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 StringBuilder stringBuilder = new StringBuilder();

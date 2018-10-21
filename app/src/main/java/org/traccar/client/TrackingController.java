@@ -53,6 +53,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private PowerManager.WakeLock wakeLock;
 
     public String extAttribute = "";
+    private int delay = 30000; //milliseconds
+    private boolean stopBluetoothScan;
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -86,6 +88,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         }
         try {
             positionProvider.startUpdates();
+            stopBluetoothScan=false;
             startBluetoothScan();
         } catch (SecurityException e) {
             Log.w(TAG, e);
@@ -97,6 +100,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         networkManager.stop();
         try {
             positionProvider.stopUpdates();
+            stopBluetoothScan=true;
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }
@@ -228,9 +232,14 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     }
 
     private void startBluetoothScan(){
-
-        //Toast.makeText(context,"Before_StartBluetoothScan: ",Toast.LENGTH_LONG).show();
-        bluetoothController.startScan();
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                bluetoothController.startScan();
+                handler.postDelayed(this, delay);
+                if(stopBluetoothScan)
+                    handler.removeCallbacks(this);
+            }
+        }, delay);
     }
 
 

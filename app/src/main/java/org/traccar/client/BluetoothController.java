@@ -23,6 +23,7 @@ public class BluetoothController {
 
     private BroadcastReceiver_BTState mBTStateUpdateReceiver;
     private Scanner_BTLE mBTLeScanner;
+
     public BluetoothController(Context context) {
         this.context = context;
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
