@@ -82,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "accuracy REAL," +
                 "battery REAL," +
                 "mock INTEGER," +
-                "extAttribute TEXT)");
+                "externalAttributes TEXT)");
     }
 
     @Override
@@ -96,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertPosition(Position position) {
+    public void insertPosition(Position position, String externalAttributes) {
         ContentValues values = new ContentValues();
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
@@ -108,16 +108,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("accuracy", position.getAccuracy());
         values.put("battery", position.getBattery());
         values.put("mock", position.getMock() ? 1 : 0);
-        values.put("extAttribute", position.getExtAttribute());
+        values.put("externalAttributes", externalAttributes);
 
         db.insertOrThrow("position", null, values);
     }
 
-    public void insertPositionAsync(final Position position, DatabaseHandler<Void> handler) {
+    public void insertPositionAsync(final Position position,final String externalAttributes, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                insertPosition(position);
+                insertPosition(position, externalAttributes);
                 return null;
             }
         }.execute();
@@ -143,7 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 position.setAccuracy(cursor.getDouble(cursor.getColumnIndex("accuracy")));
                 position.setBattery(cursor.getDouble(cursor.getColumnIndex("battery")));
                 position.setMock(cursor.getInt(cursor.getColumnIndex("mock")) > 0);
-                position.setExtAttribute(cursor.getString(cursor.getColumnIndex("extAttribute")));
+                position.setExternalAttributes(cursor.getString(cursor.getColumnIndex("externalAttributes")));
 
             } else {
                 return null;

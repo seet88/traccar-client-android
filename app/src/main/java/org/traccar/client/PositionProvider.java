@@ -59,8 +59,6 @@ public class PositionProvider implements LocationListener {
     private long interval;
     private double distance;
     private double angle;
-    public String extAttribute = "";
-    public Date fileLastCheckedTime = new Date(118,1,1,1,1,1) ;
 
     private Location lastLocation;
 
@@ -117,8 +115,7 @@ public class PositionProvider implements LocationListener {
                 || angle > 0 && Math.abs(location.getBearing() - lastLocation.getBearing()) >= angle)) {
             Log.i(TAG, "location new");
             lastLocation = location;
-            getExtAttributeFromFile();
-            listener.onPositionUpdate(new Position(deviceId, location, getBatteryLevel(context),extAttribute+"frugo2"));
+            listener.onPositionUpdate(new Position(deviceId, location, getBatteryLevel(context)));
         } else {
             Log.i(TAG, location != null ? "location ignored" : "location nil");
         }
@@ -148,42 +145,6 @@ public class PositionProvider implements LocationListener {
             return (level * 100.0) / scale;
         }
         return 0;
-    }
-
-    private void getExtAttributeFromFile(){
-        String line = null;
-
-        try {
-            String filepath = preferences.getString(MainFragment.KEY_FILEPATH, "");
-            File file = new File(filepath);
-            Date fileModyficationTime = new Date(file.lastModified());
-           // Toast.makeText(context, "fileModyficationTime: " + fileModyficationTime.toString(), Toast.LENGTH_LONG).show();
-          //  Toast.makeText(context, "fileLastCheckedTime: " + fileLastCheckedTime.toString(), Toast.LENGTH_LONG).show();
-            if(fileLastCheckedTime.before(fileModyficationTime)) {
-                FileInputStream fileInputStream = new FileInputStream(file);
-
-             //   Toast.makeText(context, "PosProvider_KEY_FILEPATH: " + preferences.getString(MainFragment.KEY_FILEPATH, "MojaTestowaSciezka"), Toast.LENGTH_LONG).show();
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line + System.getProperty("line.separator"));
-                }
-                fileInputStream.close();
-                line = stringBuilder.toString();
-
-                bufferedReader.close();
-                extAttribute=line;
-            }
-            fileLastCheckedTime = new Date() ;
-        }
-        catch(FileNotFoundException ex) {
-            Log.d(TAG, ex.getMessage());
-        }
-        catch(IOException ex) {
-            Log.d(TAG, ex.getMessage());
-        }
     }
 
 }

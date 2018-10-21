@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class TrackingController implements PositionProvider.PositionListener, NetworkManager.NetworkHandler {
 
@@ -147,7 +148,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private void write(Position position) {
         log("write", position);
         lock();
-        databaseHelper.insertPositionAsync(position, new DatabaseHelper.DatabaseHandler<Void>() {
+        String externalAttributes = getAllExternalAttributes();
+        databaseHelper.insertPositionAsync(position ,externalAttributes , new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {
                 if (success) {
@@ -242,16 +244,44 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         }, delay);
     }
 
+    private String getNearbyBluetoothDevices(){
+        ArrayList<BTLE_Device> mBTDevicesArrayList = bluetoothController.mBTDevicesArrayList;
+        String name = "";
+        String address = "";
+        String rssi = "";
+        for(BTLE_Device device : mBTDevicesArrayList){
+            if(name=="")
+                name = device.getName();
+            else
+                name += " ,"+device.getName();
+            if(address=="")
+                address = device.getAddress();
+            else
+                address += " ,"+device.getAddress();
+            if(rssi=="")
+                rssi =  " ,"+Integer.toString(device.getRSSI());
+            else
+                rssi +=  " ,"+Integer.toString(device.getRSSI()) ;
 
-    private void getExtAttributeFromFile(){
+        }
+        String nearbyBluetoothDevices = "BluetoothDevices: {address:[" + address + "], name:[" + name + "], rssi:[" + rssi + "]}";
+       return nearbyBluetoothDevices;
+    }
+
+    private String getAllExternalAttributes(){
+        String nearbyBluetoothDevices = getNearbyBluetoothDevices();
+        String externalAttributeFromFile = getExternalAttributesFromFile();
+        String allExternalAtrribute = "nearbyBluetoothDevices:{"+nearbyBluetoothDevices+"},{"+externalAttributeFromFile+"}";
+        return allExternalAtrribute;
+    }
+
+    private String getExternalAttributesFromFile(){
         String line = null;
 
         try {
-
             String filepath = preferences.getString(MainFragment.KEY_FILEPATH, "");
             FileInputStream fileInputStream = new FileInputStream (new File(filepath));
 
-            Toast.makeText(context,"traccingController: "+preferences.getString(MainFragment.KEY_FILEPATH, ""),Toast.LENGTH_LONG).show();
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
@@ -272,8 +302,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             Log.d(TAG, ex.getMessage());
         }
         extAttribute=line;
-        Toast.makeText(context, extAttribute,Toast.LENGTH_LONG).show();
-        Toast.makeText(context, "sss"+line,Toast.LENGTH_LONG).show();
+        return extAttribute;
     }
+
 
 }

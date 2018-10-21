@@ -26,7 +26,7 @@ public class Position {
     public Position() {
     }
 
-    public Position(String deviceId, Location location, double battery, String extAttribute) {
+    public Position(String deviceId, Location location, double battery) {
         this.deviceId = deviceId;
         time = new Date(location.getTime());
         latitude = location.getLatitude();
@@ -41,7 +41,6 @@ public class Position {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             this.mock = location.isFromMockProvider();
         }
-        this.extAttribute = extAttribute;
     }
 
     private long id;
@@ -154,8 +153,8 @@ public class Position {
         this.mock = mock;
     }
 
-    private  String extAttribute;
-    public  String getExtAttribute(){ return  extAttribute;}
-    public  void setExtAttribute(String extAttribute){ this.extAttribute = extAttribute;}
+    private  String externalAttributes;
+    public  String getExternalAttributes(){ return  externalAttributes;}
+    public  void setExternalAttributes(String externalAttributes){ this.externalAttributes = externalAttributes;}
 
 }

@@ -18,7 +18,7 @@ public class BluetoothController {
     public static final int BTLE_SERVICES = 2;
 
     private HashMap<String, BTLE_Device> mBTDevicesHashMap;
-    private ArrayList<BTLE_Device> mBTDevicesArrayList;
+    public ArrayList<BTLE_Device> mBTDevicesArrayList;
     private Context context;
 
     private BroadcastReceiver_BTState mBTStateUpdateReceiver;
