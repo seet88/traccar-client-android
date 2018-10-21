@@ -59,6 +59,7 @@ public class PositionProvider implements LocationListener {
     private long interval;
     private double distance;
     private double angle;
+    public String extAttribute = "";
 
     private Location lastLocation;
 
@@ -115,7 +116,7 @@ public class PositionProvider implements LocationListener {
                 || angle > 0 && Math.abs(location.getBearing() - lastLocation.getBearing()) >= angle)) {
             Log.i(TAG, "location new");
             lastLocation = location;
-            listener.onPositionUpdate(new Position(deviceId, location, getBatteryLevel(context)));
+            listener.onPositionUpdate(new Position(deviceId, location, getBatteryLevel(context),extAttribute+"frugo2"));
         } else {
             Log.i(TAG, location != null ? "location ignored" : "location nil");
         }
