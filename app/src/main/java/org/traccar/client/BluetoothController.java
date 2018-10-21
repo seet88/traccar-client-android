@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +21,6 @@ public class BluetoothController {
     private ArrayList<BTLE_Device> mBTDevicesArrayList;
     private Context context;
 
-    private Button scan;
-    private Button refresh;
     private BroadcastReceiver_BTState mBTStateUpdateReceiver;
     private Scanner_BTLE mBTLeScanner;
     public BluetoothController(Context context) {
@@ -36,6 +35,8 @@ public class BluetoothController {
         mBTDevicesArrayList = new ArrayList<>();
 
         context.registerReceiver(mBTStateUpdateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+
+       // Toast.makeText(context,"End_BluetoothController: ",Toast.LENGTH_LONG).show();
     }
 
     public void addDevice(BluetoothDevice device, int rssi) {
@@ -57,17 +58,17 @@ public class BluetoothController {
     }
 
     public void startScan(){
-        scan.setText("Scanning...");
 
         mBTDevicesArrayList.clear();
         mBTDevicesHashMap.clear();
         //adapter.notifyDataSetChanged();
 
+        //Toast.makeText(context,"middle_startScan: ",Toast.LENGTH_LONG).show();
         mBTLeScanner.start();
+       // Toast.makeText(context,"End_startScan: ",Toast.LENGTH_LONG).show();
     }
 
     public void stopScan() {
-        scan.setText("Scan Again");
 
         mBTLeScanner.stop();
     }

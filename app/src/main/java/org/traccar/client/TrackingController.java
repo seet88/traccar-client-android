@@ -48,6 +48,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private PositionProvider positionProvider;
     private DatabaseHelper databaseHelper;
     private NetworkManager networkManager;
+    private BluetoothController bluetoothController;
 
     private PowerManager.WakeLock wakeLock;
 
@@ -70,6 +71,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         positionProvider = new PositionProvider(context, this);
         databaseHelper = new DatabaseHelper(context);
         networkManager = new NetworkManager(context, this);
+        bluetoothController = new BluetoothController(context);
         isOnline = networkManager.isOnline();
 
         url = preferences.getString(MainFragment.KEY_URL, context.getString(R.string.settings_url_default_value));
@@ -84,6 +86,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         }
         try {
             positionProvider.startUpdates();
+            startBluetoothScan();
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }
@@ -222,6 +225,13 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 }
             }
         }, RETRY_DELAY);
+    }
+
+    private void startBluetoothScan(){
+
+        //Toast.makeText(context,"Before_StartBluetoothScan: ",Toast.LENGTH_LONG).show();
+        bluetoothController.startScan();
+        //Toast.makeText(context,"After_StartBluetoothScan: ",Toast.LENGTH_LONG).show();
     }
 
 
