@@ -18,11 +18,10 @@ public class Scanner_BTLE {
     private long scanPeriod;
     private int signalStrength;
 
-    public Scanner_BTLE(Context context, long scanPeriod, int signalStrength) {
+    public Scanner_BTLE(Context context, long scanPeriod, int signalStrength, BluetoothController bluetoothController) {
         this.context = context;
-       // Toast.makeText(context,"middle_Scanner_BTLE: ",Toast.LENGTH_LONG).show();
-
         mHandler = new Handler();
+        bc = bluetoothController;
 
         this.scanPeriod = scanPeriod;
         this.signalStrength = signalStrength;
@@ -30,7 +29,6 @@ public class Scanner_BTLE {
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
-      //  Toast.makeText(context,"end_Scanner_BTLE: ",Toast.LENGTH_LONG).show();
     }
 
     public boolean isScanning() {
@@ -38,13 +36,13 @@ public class Scanner_BTLE {
     }
 
     public void start() {
-       /*seet if (!Utils.checkBluetooth(mBluetoothAdapter)) {
+        if (!Utils.checkBluetooth(mBluetoothAdapter)) {
             //seet Utils.requestUserBluetooth(context);
             bc.stopScan();
         }
-        else { */
+        else {
             scanLeDevice(true);
-       // }
+        }
     }
 
     public void stop() {
@@ -68,7 +66,7 @@ public class Scanner_BTLE {
                     mScanning = false;
                      mBluetoothAdapter.stopLeScan(mLeScanCallback);
 
-                    //seet bc.stopScan();
+                    bc.stopScan();
                 }
             }, 10000);
             mScanning = true;
@@ -78,7 +76,7 @@ public class Scanner_BTLE {
         }
         else {
             mScanning = false;
-           //seet mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
 
         Toast.makeText(context,"scanLeDevice: ",Toast.LENGTH_LONG).show();
@@ -96,9 +94,8 @@ public class Scanner_BTLE {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                //bc.addDevice(device, new_rssi);
-                                Toast.makeText(context,"scan: ",Toast.LENGTH_LONG).show();
-                                Utils.toast(context, "CallBackdevice"+device.getAddress());
+                                bc.addDevice(device, new_rssi);
+                                //Utils.toast(context, "CallBackdevice"+device.getAddress());
                             }
                         });
                     }

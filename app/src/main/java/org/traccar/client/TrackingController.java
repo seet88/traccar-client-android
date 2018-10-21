@@ -231,7 +231,6 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
 
         //Toast.makeText(context,"Before_StartBluetoothScan: ",Toast.LENGTH_LONG).show();
         bluetoothController.startScan();
-        //Toast.makeText(context,"After_StartBluetoothScan: ",Toast.LENGTH_LONG).show();
     }
 
 

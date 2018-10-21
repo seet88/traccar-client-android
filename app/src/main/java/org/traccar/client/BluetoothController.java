@@ -30,13 +30,12 @@ public class BluetoothController {
             Utils.toast(context, "BLE not supported");
         }
         mBTStateUpdateReceiver = new BroadcastReceiver_BTState(context);
-        mBTLeScanner = new Scanner_BTLE(context, 15000, -175);
+        mBTLeScanner = new Scanner_BTLE(context, 15000, -175, this);
         mBTDevicesHashMap = new HashMap<>();
         mBTDevicesArrayList = new ArrayList<>();
 
         context.registerReceiver(mBTStateUpdateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
-       // Toast.makeText(context,"End_BluetoothController: ",Toast.LENGTH_LONG).show();
     }
 
     public void addDevice(BluetoothDevice device, int rssi) {
@@ -63,9 +62,7 @@ public class BluetoothController {
         mBTDevicesHashMap.clear();
         //adapter.notifyDataSetChanged();
 
-        //Toast.makeText(context,"middle_startScan: ",Toast.LENGTH_LONG).show();
         mBTLeScanner.start();
-       // Toast.makeText(context,"End_startScan: ",Toast.LENGTH_LONG).show();
     }
 
     public void stopScan() {
