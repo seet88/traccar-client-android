@@ -49,6 +49,26 @@
         android:summary="@string/settings_angle_summary"
         android:title="@string/settings_angle_title" />
 
+    <EditTextPreference
+        android:defaultValue=""
+        android:key="filePath"
+        android:summary="Path to external file attribute"
+        android:title="Path file" />
+
+    <EditTextPreference
+        android:defaultValue="10"
+        android:key="scanBTEveryMinutes"
+        android:numeric="integer"
+        android:summary="How often run scanning (minutes)"
+        android:title="BT scan delay time" />
+
+    <EditTextPreference
+        android:defaultValue="1"
+        android:key="scanningBTTime"
+        android:numeric="integer"
+        android:summary="How long is scanning running (minutes)"
+        android:title="BT scanning time" />
+
     <SwitchPreference
         android:defaultValue="false"
         android:key="readAttributesFromFile"
@@ -57,11 +77,7 @@
         android:switchTextOff="false"
         android:switchTextOn="true"
         android:title="Read attributes from file" />
-    <EditTextPreference
-        android:defaultValue=""
-        android:key="filePath"
-        android:summary="Path to external file attribute"
-        android:title="Path file" />
+
     <SwitchPreference
         android:defaultValue="false"
         android:key="scanNearbyBTDevices"
@@ -70,17 +86,5 @@
         android:switchTextOff="false"
         android:switchTextOn="true"
         android:title="Scan nearby Bluetooth devices" />
-    <EditTextPreference
-        android:defaultValue="10"
-        android:key="scanBEveryMinutes"
-        android:numeric="integer"
-        android:summary="How often run scanning (minutes)"
-        android:title="BT scan delay time" />
-    <EditTextPreference
-        android:defaultValue="1"
-        android:key="scanningBTTime"
-        android:numeric="integer"
-        android:summary="How long is scanning running (minutes)"
-        android:title="BT scanning time" />
 
 </PreferenceScreen>

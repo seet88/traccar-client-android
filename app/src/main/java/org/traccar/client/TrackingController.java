@@ -56,11 +56,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     public String extAttribute = "";
     private int delay = 30000; //milliseconds
     private boolean stopBluetoothScan;
-    private boolean readAttributeFromFile;
-    private String filePath;
-    private boolean scanNearbyBluetoothDevices;
-    private int scanBluetoothEveryMinutes;
-    private int scanningBluetoothTime;
+    private boolean readAttributeFromFile = false;
+    private String externalAttributefilePath = "";
+    private boolean scanNearbyBluetoothDevices = false;
+    private int scanBluetoothEveryMinutes = 10;
+    private int scanningBluetoothTime = 1;
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -87,7 +87,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 
-        getUserPreferences();
+        //getUserPreferences();
     }
 
     public void start() {
@@ -96,8 +96,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         }
         try {
             positionProvider.startUpdates();
-            stopBluetoothScan=false;
-            startBluetoothScan();
+            if(scanNearbyBluetoothDevices) {
+                stopBluetoothScan = false;
+                startBluetoothScan();
+            }
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }
@@ -250,11 +252,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         handler.postDelayed(new Runnable(){
             public void run(){
                 bluetoothController.startScan();
-                handler.postDelayed(this, delay);
+                handler.postDelayed(this, scanBluetoothEveryMinutes*1000*60);
                 if(stopBluetoothScan)
                     handler.removeCallbacks(this);
             }
-        }, delay);
+        }, scanBluetoothEveryMinutes*1000*60);
     }
 
     private String getNearbyBluetoothDevices(){
@@ -282,11 +284,19 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     }
 
     private String getAllExternalAttributes(){
-        String nearbyBluetoothDevices = getNearbyBluetoothDevices();
-        Toast.makeText(context,"nearbyBluetoothDevices: "+nearbyBluetoothDevices,Toast.LENGTH_LONG).show();
-        String externalAttributeFromFile = getExternalAttributesFromFile();
-        String allExternalAtrribute = "\"nearbyBluetoothDevices\":{"+nearbyBluetoothDevices+"}, \"externalAttributeFromFile\": {"+externalAttributeFromFile+"}";
-
+        String allExternalAtrribute = "";
+        getUserPreferences();
+        if(scanNearbyBluetoothDevices) {
+            String nearbyBluetoothDevices = getNearbyBluetoothDevices();
+            allExternalAtrribute += "\"nearbyBluetoothDevices\":{"+nearbyBluetoothDevices+"}";
+            Toast.makeText(context, "nearbyBluetoothDevices: " + nearbyBluetoothDevices, Toast.LENGTH_LONG).show();
+        }
+        if(readAttributeFromFile) {
+            String externalAttributeFromFile = getExternalAttributesFromFile();
+            if(allExternalAtrribute != "")
+                allExternalAtrribute +=",";
+            allExternalAtrribute +=" \"externalAttributeFromFile\": {" + externalAttributeFromFile + "}";
+        }
         return allExternalAtrribute;
     }
 
@@ -294,7 +304,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         String line = null;
 
         try {
-            String filepath = filePath;
+            String filepath = externalAttributefilePath;
             if(filepath=="")
                 return "";
             FileInputStream fileInputStream = new FileInputStream (new File(filepath));
@@ -323,18 +333,18 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     }
 
     private void getUserPreferences(){
-        if(preferences.getString(MainFragment.KEY_FILEPATH, "")=="false")
-            readAttributeFromFile = false;
-        else
+        if(preferences.getBoolean(MainFragment.KEY_READ_ATTRIBUTES_FROM_FILE, true))
             readAttributeFromFile = true;
-        if(preferences.getString(MainFragment.KEY_SCAN_NEARBY_BT_DEVICES, "")=="false")
-            scanNearbyBluetoothDevices = false;
         else
+            readAttributeFromFile = false;
+        if(preferences.getBoolean(MainFragment.KEY_SCAN_NEARBY_BT_DEVICES, true))
             scanNearbyBluetoothDevices = true;
+        else
+            scanNearbyBluetoothDevices = false;
 
-        scanBluetoothEveryMinutes = preferences.getInt(MainFragment.KEY_SCAN_BT_EVERY_MINUTES, 10);
-        scanningBluetoothTime = preferences.getInt(MainFragment.KEY_SCANNING_BT_TIME, 1);
-        filePath = preferences.getString(MainFragment.KEY_FILEPATH, "");
+        scanBluetoothEveryMinutes = Integer.parseInt(preferences.getString(MainFragment.KEY_SCAN_BT_EVERY_MINUTES, "10"));
+        scanningBluetoothTime =  Integer.parseInt(preferences.getString(MainFragment.KEY_SCANNING_BT_TIME, "1"));
+        externalAttributefilePath = preferences.getString(MainFragment.KEY_FILEPATH, "");
     }
 
 }

@@ -179,6 +179,7 @@ public class MainFragment extends PreferenceFragment implements OnSharedPreferen
         findPreference(KEY_SCAN_NEARBY_BT_DEVICES).setEnabled(enabled);
         findPreference(KEY_SCAN_BT_EVERY_MINUTES).setEnabled(enabled);
         findPreference(KEY_SCANNING_BT_TIME).setEnabled(enabled);
+
     }
 
     @Override
