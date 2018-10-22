@@ -257,20 +257,20 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         String rssi = "";
         for(BTLE_Device device : mBTDevicesArrayList){
             if(name=="")
-                name = device.getName();
+                name = '"'+device.getName()+'"';
             else
-                name += " ,"+device.getName();
+                name += " ,\""+device.getName()+'"';
             if(address=="")
-                address = device.getAddress();
+                address = "\""+device.getAddress()+"\"";
             else
-                address += " ,"+device.getAddress();
+                address += " ,\""+device.getAddress()+"\"";
             if(rssi=="")
                 rssi =  " ,"+Integer.toString(device.getRSSI());
             else
                 rssi +=  " ,"+Integer.toString(device.getRSSI()) ;
 
         }
-        String nearbyBluetoothDevices = "BluetoothDevices: {address:[" + address + "], name:[" + name + "], rssi:[" + rssi + "]}";
+        String nearbyBluetoothDevices = '"'+"BluetoothDevices\": {\"address\":[" + address + "], \"name\":[" + name + "], \"rssi\":[" + rssi + "]}";
        return nearbyBluetoothDevices;
     }
 
@@ -278,7 +278,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         String nearbyBluetoothDevices = getNearbyBluetoothDevices();
         Toast.makeText(context,"nearbyBluetoothDevices: "+nearbyBluetoothDevices,Toast.LENGTH_LONG).show();
         String externalAttributeFromFile = getExternalAttributesFromFile();
-        String allExternalAtrribute = "nearbyBluetoothDevices:{"+nearbyBluetoothDevices+"},{"+externalAttributeFromFile+"}";
+        String allExternalAtrribute = "\"nearbyBluetoothDevices\":{"+nearbyBluetoothDevices+"}, \"externalAttributeFromFile\": {"+externalAttributeFromFile+"}";
 
         return allExternalAtrribute;
     }
