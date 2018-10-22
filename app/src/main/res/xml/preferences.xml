@@ -52,39 +52,39 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="readAttributesFromFile"
-        android:summaryOff="Don't read"
-        android:summaryOn="Read"
-        android:switchTextOff="false"
-        android:switchTextOn="true"
-        android:title="Read attributes from file" />
+        android:summaryOff="@string/settings_readAttributesFromFile_summary_off"
+        android:summaryOn="@string/settings_readAttributesFromFile_summary_on"
+        android:switchTextOff="@string/settings_readAttributesFromFile_off"
+        android:switchTextOn="@string/settings_readAttributesFromFile_on"
+        android:title="@string/settings_readAttributesFromFile_title" />
 
     <EditTextPreference
         android:defaultValue=""
         android:key="filePath"
-        android:summary="Path to external file attribute"
-        android:title="Path file" />
+        android:summary="@string/settings_filePath_summary"
+        android:title="@string/settings_filePath_title" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="scanNearbyBTDevices"
-        android:summaryOff="Don't scan"
-        android:summaryOn="Scan"
-        android:switchTextOff="false"
-        android:switchTextOn="true"
-        android:title="Scan nearby Bluetooth devices" />
+        android:summaryOff="@string/settings_scanNearbyBTDevices_summary_off"
+        android:summaryOn="@string/settings_scanNearbyBTDevices_summary_on"
+        android:switchTextOff="@string/settings_scanNearbyBTDevices_off"
+        android:switchTextOn="@string/settings_scanNearbyBTDevices_on"
+        android:title="@string/settings_scanNearbyBTDevices_title" />
 
     <EditTextPreference
         android:defaultValue="10"
         android:key="scanBTEveryMinutes"
         android:numeric="integer"
-        android:summary="How often run scanning (minutes)"
-        android:title="BT scan delay time" />
+        android:summary="@string/settings_scanBTEveryMinutes_summary"
+        android:title="@string/settings_scanBTEveryMinutes_title" />
 
     <EditTextPreference
         android:defaultValue="1"
         android:key="scanningBTTime"
         android:numeric="integer"
-        android:summary="How long is scanning running (seconds)"
-        android:title="BT scanning time" />
+        android:summary="@string/settings_scanningBTTime_summary"
+        android:title="@string/settings_scanningBTTime_title" />
 
 </PreferenceScreen>

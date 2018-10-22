@@ -44,4 +44,20 @@
   <string name="hidden_app_name">Device Settings</string>
   <string name="hidden_alert">The app has been hidden. To open it again please dial 8722227 (TRACCAR).</string>
   <string name="error_msg_invalid_url">Please enter a valid http:// or https:// URL</string>
+  <string name="settings_readAttributesFromFile_summary_off">Do not read</string>
+  <string name="settings_readAttributesFromFile_summary_on">Read</string>
+  <string name="settings_readAttributesFromFile_off">false</string>
+  <string name="settings_readAttributesFromFile_on">true</string>
+  <string name="settings_readAttributesFromFile_title">Read attributes from file</string>
+  <string name="settings_filePath_summary">Full path to external file attribute</string>
+  <string name="settings_filePath_title">Path file</string>
+  <string name="settings_scanNearbyBTDevices_summary_off">Don not scan</string>
+  <string name="settings_scanNearbyBTDevices_summary_on">Scan</string>
+  <string name="settings_scanNearbyBTDevices_off">false</string>
+  <string name="settings_scanNearbyBTDevices_on">true</string>
+  <string name="settings_scanNearbyBTDevices_title">Scan nearby Bluetooth devices</string>
+  <string name="settings_scanBTEveryMinutes_summary">How often run scanning (minutes)</string>
+  <string name="settings_scanBTEveryMinutes_title">BT scan delay time</string>
+  <string name="settings_scanningBTTime_summary">How long is scanning running (sec)</string>
+  <string name="settings_scanningBTTime_title">BT scanning time</string>
 </resources>

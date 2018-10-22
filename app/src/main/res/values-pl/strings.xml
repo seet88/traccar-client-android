@@ -37,4 +37,20 @@
   <string name="hidden_app_name">Ustawienia urządzenia</string>
   <string name="hidden_alert">Aplikacja została ukryta. By ją otworzyć, zadzwoń pod 8722227 (TRACCAR).</string>
   <string name="error_msg_invalid_url">Wprowadź poprawny adres http:// lub https:// URL</string>
+  <string name="settings_readAttributesFromFile_summary_off">Nie czytaj</string>
+  <string name="settings_readAttributesFromFile_summary_on">Czytaj</string>
+  <string name="settings_readAttributesFromFile_off">Wyłącz</string>
+  <string name="settings_readAttributesFromFile_on">Włącz</string>
+  <string name="settings_readAttributesFromFile_title">Czytaj atrybuty z pliku</string>
+  <string name="settings_filePath_summary">Pełna ścieżka do pliku z atrybutami</string>
+  <string name="settings_filePath_title">Ścieżka pliku</string>
+  <string name="settings_scanNearbyBTDevices_summary_off">Nie skanuj</string>
+  <string name="settings_scanNearbyBTDevices_summary_on">Skanuj</string>
+  <string name="settings_scanNearbyBTDevices_off">Wyłącz</string>
+  <string name="settings_scanNearbyBTDevices_on">Włącz</string>
+  <string name="settings_scanNearbyBTDevices_title">Skanuj urządzenia BT w okolicy</string>
+  <string name="settings_scanBTEveryMinutes_summary">Jak często skanować (w minutach)</string>
+  <string name="settings_scanBTEveryMinutes_title">Częstotliwość skanowania</string>
+  <string name="settings_scanningBTTime_summary">Jak długo skanować (w sekundach)</string>
+  <string name="settings_scanningBTTime_title">Długość skanowania</string>
 </resources>
