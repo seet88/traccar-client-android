@@ -56,6 +56,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     public String extAttribute = "";
     private int delay = 30000; //milliseconds
     private boolean stopBluetoothScan;
+    private boolean readAttributeFromFile;
+    private String filePath;
+    private boolean scanNearbyBluetoothDevices;
+    private int scanBluetoothEveryMinutes;
+    private int scanningBluetoothTime;
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -81,6 +86,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
 
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+
+        getUserPreferences();
     }
 
     public void start() {
@@ -287,7 +294,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         String line = null;
 
         try {
-            String filepath = preferences.getString(MainFragment.KEY_FILEPATH, "");
+            String filepath = filePath;
+            if(filepath=="")
+                return "";
             FileInputStream fileInputStream = new FileInputStream (new File(filepath));
 
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -313,5 +322,19 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         return extAttribute;
     }
 
+    private void getUserPreferences(){
+        if(preferences.getString(MainFragment.KEY_FILEPATH, "")=="false")
+            readAttributeFromFile = false;
+        else
+            readAttributeFromFile = true;
+        if(preferences.getString(MainFragment.KEY_SCAN_NEARBY_BT_DEVICES, "")=="false")
+            scanNearbyBluetoothDevices = false;
+        else
+            scanNearbyBluetoothDevices = true;
+
+        scanBluetoothEveryMinutes = preferences.getInt(MainFragment.KEY_SCAN_BT_EVERY_MINUTES, 10);
+        scanningBluetoothTime = preferences.getInt(MainFragment.KEY_SCANNING_BT_TIME, 1);
+        filePath = preferences.getString(MainFragment.KEY_FILEPATH, "");
+    }
 
 }

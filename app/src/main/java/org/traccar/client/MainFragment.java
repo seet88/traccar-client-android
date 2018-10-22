@@ -61,6 +61,10 @@ public class MainFragment extends PreferenceFragment implements OnSharedPreferen
     public static final String KEY_ACCURACY = "accuracy";
     public static final String KEY_STATUS = "status";
     public static final String KEY_FILEPATH = "filePath";
+    public static final String KEY_READ_ATTRIBUTES_FROM_FILE = "readAttributesFromFile";
+    public static final String KEY_SCAN_NEARBY_BT_DEVICES = "scanNearbyBTDevices";
+    public static final String KEY_SCAN_BT_EVERY_MINUTES = "scanBTEveryMinutes";
+    public static final String KEY_SCANNING_BT_TIME = "scanningBTTime";
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
@@ -171,6 +175,10 @@ public class MainFragment extends PreferenceFragment implements OnSharedPreferen
         findPreference(KEY_ANGLE).setEnabled(enabled);
         findPreference(KEY_ACCURACY).setEnabled(enabled);
         findPreference(KEY_FILEPATH).setEnabled(enabled);
+        findPreference(KEY_READ_ATTRIBUTES_FROM_FILE).setEnabled(enabled);
+        findPreference(KEY_SCAN_NEARBY_BT_DEVICES).setEnabled(enabled);
+        findPreference(KEY_SCAN_BT_EVERY_MINUTES).setEnabled(enabled);
+        findPreference(KEY_SCANNING_BT_TIME).setEnabled(enabled);
     }
 
     @Override
