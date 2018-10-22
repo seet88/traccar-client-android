@@ -84,7 +84,7 @@
         android:defaultValue="1"
         android:key="scanningBTTime"
         android:numeric="integer"
-        android:summary="How long is scanning running (minutes)"
+        android:summary="How long is scanning running (seconds)"
         android:title="BT scanning time" />
 
 </PreferenceScreen>

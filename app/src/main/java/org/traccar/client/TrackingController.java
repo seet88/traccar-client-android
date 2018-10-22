@@ -57,10 +57,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private int delay = 30000; //milliseconds
     private boolean stopBluetoothScan;
     private boolean readAttributeFromFile = false;
-    private String externalAttributefilePath = "";
+    private String externalAttributeFilePath = "";
     private boolean scanNearbyBluetoothDevices = false;
     private int scanBluetoothEveryMinutes = 1;
-    private int scanningBluetoothTime = 1;
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -250,6 +249,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     }
 
     private void startBluetoothScan(){
+        //first scan on start then loop with delay
+        bluetoothController.startScan();
+
         handler.postDelayed(new Runnable(){
             public void run(){
                 bluetoothController.startScan();
@@ -261,7 +263,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     }
 
     private String getNearbyBluetoothDevices(){
-        ArrayList<BTLE_Device> mBTDevicesArrayList = bluetoothController.mBTDevicesArrayList;
+        ArrayList<BTLE_Device> mBTDevicesArrayList = bluetoothController.mBTDevicesHistoryArrayList;
         String name = "";
         String address = "";
         String rssi = "";
@@ -298,14 +300,14 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 allExternalAtrribute +=",";
             allExternalAtrribute +=" \"externalAttributeFromFile\": {" + externalAttributeFromFile + "}";
         }
-        return allExternalAtrribute;
+        return allExternalAtrribute.replace("\\","");
     }
 
     private String getExternalAttributesFromFile(){
         String line = null;
 
         try {
-            String filepath = externalAttributefilePath;
+            String filepath = externalAttributeFilePath;
             if(filepath=="")
                 return "";
             FileInputStream fileInputStream = new FileInputStream (new File(filepath));
@@ -344,8 +346,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             scanNearbyBluetoothDevices = false;
 
         scanBluetoothEveryMinutes = Integer.parseInt(preferences.getString(MainFragment.KEY_SCAN_BT_EVERY_MINUTES, "10"));
-        scanningBluetoothTime =  Integer.parseInt(preferences.getString(MainFragment.KEY_SCANNING_BT_TIME, "1"));
-        externalAttributefilePath = preferences.getString(MainFragment.KEY_FILEPATH, "");
+        externalAttributeFilePath = preferences.getString(MainFragment.KEY_FILEPATH, "");
     }
 
 }

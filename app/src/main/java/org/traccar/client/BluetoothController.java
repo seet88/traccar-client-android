@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -19,18 +21,24 @@ public class BluetoothController {
 
     private HashMap<String, BTLE_Device> mBTDevicesHashMap;
     public ArrayList<BTLE_Device> mBTDevicesArrayList;
+    public ArrayList<BTLE_Device> mBTDevicesHistoryArrayList;
     private Context context;
 
+    private SharedPreferences preferences;
     private BroadcastReceiver_BTState mBTStateUpdateReceiver;
     private Scanner_BTLE mBTLeScanner;
+    private int scanningBluetoothTime = 1;
 
     public BluetoothController(Context context) {
         this.context = context;
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Utils.toast(context, "BLE not supported");
         }
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
         mBTStateUpdateReceiver = new BroadcastReceiver_BTState(context);
-        mBTLeScanner = new Scanner_BTLE(context, 15000, -175, this);
+
+        scanningBluetoothTime =  Integer.parseInt(preferences.getString(MainFragment.KEY_SCANNING_BT_TIME, "1"));
+        mBTLeScanner = new Scanner_BTLE(context, scanningBluetoothTime*1000, -175, this);
         mBTDevicesHashMap = new HashMap<>();
         mBTDevicesArrayList = new ArrayList<>();
 
@@ -56,7 +64,7 @@ public class BluetoothController {
     }
 
     public void startScan(){
-
+        mBTDevicesHistoryArrayList = mBTDevicesArrayList;
         mBTDevicesArrayList.clear();
         mBTDevicesHashMap.clear();
         //adapter.notifyDataSetChanged();
