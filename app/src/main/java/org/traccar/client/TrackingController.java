@@ -59,7 +59,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private boolean readAttributeFromFile = false;
     private String externalAttributefilePath = "";
     private boolean scanNearbyBluetoothDevices = false;
-    private int scanBluetoothEveryMinutes = 10;
+    private int scanBluetoothEveryMinutes = 1;
     private int scanningBluetoothTime = 1;
 
     private void lock() {
@@ -87,7 +87,6 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 
-        //getUserPreferences();
     }
 
     public void start() {
@@ -95,9 +94,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             read();
         }
         try {
+            getUserPreferences();
             positionProvider.startUpdates();
             if(scanNearbyBluetoothDevices) {
                 stopBluetoothScan = false;
+
                 startBluetoothScan();
             }
         } catch (SecurityException e) {
@@ -157,7 +158,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private void write(Position position) {
         log("write", position);
         lock();
-        Toast.makeText(context,"write: ",Toast.LENGTH_LONG).show();
+       // Toast.makeText(context,"write: ",Toast.LENGTH_LONG).show();
         String externalAttributes = getAllExternalAttributes();
         databaseHelper.insertPositionAsync(position, externalAttributes ,new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
@@ -166,7 +167,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                     if (isOnline && isWaiting) {
                         read();
                         isWaiting = false;
-                        Toast.makeText(context,"write_done: ",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context,"write_done: ",Toast.LENGTH_LONG).show();
                     }
                 }
                 unlock();
@@ -177,7 +178,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private void read() {
         log("read", null);
         lock();
-        Toast.makeText(context,"read: ",Toast.LENGTH_LONG).show();
+        //Toast.makeText(context,"read: ",Toast.LENGTH_LONG).show();
         databaseHelper.selectPositionAsync(new DatabaseHelper.DatabaseHandler<Position>() {
             @Override
             public void onComplete(boolean success, Position result) {
@@ -185,7 +186,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                     if (result != null) {
                         if (result.getDeviceId().equals(preferences.getString(MainFragment.KEY_DEVICE, null))) {
                             send(result);
-                            Toast.makeText(context,"read_done: ",Toast.LENGTH_LONG).show();
+                            //Toast.makeText(context,"read_done: ",Toast.LENGTH_LONG).show();
                         } else {
                             delete(result);
                         }
@@ -219,14 +220,14 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private void send(final Position position) {
         log("send", position);
         lock();
-        Toast.makeText(context,"send: ",Toast.LENGTH_LONG).show();
+        //Toast.makeText(context,"send: ",Toast.LENGTH_LONG).show();
         String request = ProtocolFormatter.formatRequest(url, position);
         RequestManager.sendRequestAsync(request, new RequestManager.RequestHandler() {
             @Override
             public void onComplete(boolean success) {
                 if (success) {
                     delete(position);
-                    Toast.makeText(context,"send_done: ",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context,"send_done: ",Toast.LENGTH_LONG).show();
                 } else {
                     StatusActivity.addMessage(context.getString(R.string.status_send_fail));
                     retry();

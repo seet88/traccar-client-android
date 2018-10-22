@@ -27,7 +27,6 @@ public class BluetoothController {
     public BluetoothController(Context context) {
         this.context = context;
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            //Toast.makeText(getApplicationContext(), "BLE not supported", Toast.LENGTH_SHORT).show();
             Utils.toast(context, "BLE not supported");
         }
         mBTStateUpdateReceiver = new BroadcastReceiver_BTState(context);
@@ -52,6 +51,7 @@ public class BluetoothController {
         else {
             mBTDevicesHashMap.get(address).setRSSI(rssi);
         }
+        //Toast.makeText(context,"address: "+address,Toast.LENGTH_LONG).show();
         //adapter.notifyDataSetChanged();
     }
 

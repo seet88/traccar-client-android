@@ -54,14 +54,14 @@ public class Scanner_BTLE {
     // providing an array of UUID objects that specify the GATT services your app supports.
     private void scanLeDevice(final boolean enable) {
         if (enable && !mScanning) {
-            Utils.toast(context, "Starting BLE scan...");
+            //Utils.toast(context, "Starting BLE scan...");
 
             // Stops scanning after a pre-defined scan period.
 
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.toast(context, "Stopping BLE scan...");
+                    //Utils.toast(context, "Stopping BLE scan...");
 
                     mScanning = false;
                      mBluetoothAdapter.stopLeScan(mLeScanCallback);
