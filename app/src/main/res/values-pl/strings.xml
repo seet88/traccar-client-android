@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Klient Traccar</string>
+  <string name="app_name">Klient Traccar z BT</string>
   <string name="app_logo">Traccar</string>
   <string name="settings_id_title">Identyfikator urządzenia</string>
   <string name="settings_url_title">URL Serwera</string>
@@ -27,7 +27,7 @@
   <string name="menu_about">O Traccar</string>
   <string name="menu_shortcuts">Dodaj skróty</string>
   <string name="menu_clear">Wyczyść</string>
-  <string name="about_description">Monitor GPS dla urządzeń Android. Kompatybilny z serwerem Traccar oraz innymi platformami śledzącymi.</string>
+  <string name="about_description">Monitor GPS dla urządzeń Android wraz z skanowaniem urządzeń Bluetooth w okolicy. Kompatybilny z serwerem Traccar oraz innymi platformami śledzącymi.</string>
   <string name="about_license">Ta aplikacja jest darmowa i otwartoźródłowa. Kod źródłowy jest licencjonowany Apache License Version 2.0 i jest dostępny na GitHub.</string>
   <string name="about_web">Więcej informacji - odwiedź\nwww.traccar.org/client</string>
   <string name="status_send_success">Wysłane poprawnie</string>

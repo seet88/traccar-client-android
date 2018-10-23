@@ -82,7 +82,7 @@
         android:title="@string/settings_scanBTEveryMinutes_title" />
 
     <EditTextPreference
-        android:defaultValue="1"
+        android:defaultValue="180"
         android:key="scanningBTTime"
         android:numeric="integer"
         android:summary="@string/settings_scanningBTTime_summary"
