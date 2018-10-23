@@ -6,7 +6,10 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Handler;
 import android.widget.Toast;
-
+/*
+Created by Kelvin on 5/8/16.
+https://github.com/kaviles/BLE_Tutorials
+ */
 public class Scanner_BTLE {
     private BluetoothController bc;
     private final Context context;

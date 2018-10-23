@@ -1,7 +1,10 @@
 package org.traccar.client;
 
 import android.bluetooth.BluetoothDevice;
-
+/*
+Created by Kelvin on 5/8/16.
+https://github.com/kaviles/BLE_Tutorials
+ */
 public class BTLE_Device {
     private BluetoothDevice bluetoothDevice;
     private int rssi;

@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
 import android.widget.Toast;
-
+/*
+Created by Kelvin on 5/8/16.
+https://github.com/kaviles/BLE_Tutorials
+ */
 public class Utils {
     public static boolean checkBluetooth(BluetoothAdapter bluetoothAdapter) {
 

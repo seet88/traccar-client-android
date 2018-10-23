@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/*
+Created by Kelvin on 5/8/16.
+https://github.com/kaviles/BLE_Tutorials
+ */
 public class BluetoothController {
     private final static String TAG = MainActivity.class.getSimpleName();
 
