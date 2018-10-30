@@ -279,13 +279,13 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         if(address.length()<1700)
             nearbyBluetoothDevices = '"'+"BluetoothDevices"+'"'+": {"+'"'+"address"+'"'+":[" + address + "]";
         else {
-            nearbyBluetoothDevices = '"' + "BluetoothDevices"+'"'+": {"+'"'+"address"+'"'+":[" + address.substring(0, 1700) + "]";
+            nearbyBluetoothDevices = '"' + "BluetoothDevices"+'"'+": {"+'"'+"address"+'"'+":[" + address.substring(0, 1700) + "] }";
             return nearbyBluetoothDevices;
         }
         if(nearbyBluetoothDevices.length()<750)
-            nearbyBluetoothDevices += ", "+'"'+"rssi"+'"'+":[" + rssi + "]";
+            nearbyBluetoothDevices += ", "+'"'+"rssi"+'"'+":[" + rssi + "] }";
         else
-            return nearbyBluetoothDevices;
+            return nearbyBluetoothDevices + "}";
         //if(nearbyBluetoothDevices.length()<1100)
         //if want add any other property from device bluetooth
         //nearbyBluetoothDevices += '"'+"BluetoothDevices\": {\"address\":[" + address + "], \"name\":[" + name + "], \"rssi\":[" + rssi + "]}";
@@ -293,19 +293,22 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     }
 
     private String getAllExternalAttributes(){
-        String allExternalAttribute = "";
+        String allExternalAttribute = "[";
         getUserPreferences();
         if(scanNearbyBluetoothDevices) {
             String nearbyBluetoothDevices = getNearbyBluetoothDevices();
-            allExternalAttribute += "nearbyBluetoothDevices"+'"'+":{"+nearbyBluetoothDevices+"}";
+            allExternalAttribute += "{"+nearbyBluetoothDevices+"}";
+            //allExternalAttribute += "nearbyBluetoothDevices"+'"'+":{"+nearbyBluetoothDevices+"}";
             //Toast.makeText(context, "nearbyBluetoothDevices: " + nearbyBluetoothDevices, Toast.LENGTH_LONG).show();
         }
         if(readAttributeFromFile) {
             String externalAttributeFromFile = getExternalAttributesFromFile();
             if(allExternalAttribute != "")
-                allExternalAttribute +=","+'"';
-            allExternalAttribute +="externalAttributeFromFile"+'"'+": {" + externalAttributeFromFile + "}";
+                allExternalAttribute +=",";
+            allExternalAttribute +=" {" + externalAttributeFromFile + "}";
+            //allExternalAttribute +="externalAttributeFromFile"+'"'+": {" + externalAttributeFromFile + "}";
         }
+        allExternalAttribute += "]";
         return allExternalAttribute;
     }
 
