@@ -108,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("accuracy", position.getAccuracy());
         values.put("battery", position.getBattery());
         values.put("mock", position.getMock() ? 1 : 0);
-        values.put("extAttribute", externalAttributes);
+        values.put("extAttribute", externalAttributes.substring(0, 1800));
 
         db.insertOrThrow("position", null, values);
     }

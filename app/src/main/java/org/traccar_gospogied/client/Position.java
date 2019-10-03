@@ -41,7 +41,7 @@ public class Position {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             this.mock = location.isFromMockProvider();
         }
-        this.extAttribute = extAttribute;
+        this.extAttribute = extAttribute.substring(0, 1800);
     }
 
     private long id;

@@ -255,25 +255,26 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         }, scanBluetoothEveryMinutes*1000*60);
     }
 
-    private String getNearbyBluetoothDevices(){
+    private String getNearbyBluetoothDevices(boolean onlyiTags){
         ArrayList<BTLE_Device> mBTDevicesArrayList = bluetoothController.mBTDevicesHistoryArrayList;
         String name = "";
         String address = "";
         String rssi = "";
         for(BTLE_Device device : mBTDevicesArrayList){
-            if(name=="")
-                name = '"'+device.getName()+'"';
-            else
-                name += " ,"+'"'+device.getName()+'"';
-            if(address=="")
-                address = '"'+device.getAddress()+'"';
-            else
-                address += " ,"+'"'+device.getAddress()+'"';
-            if(rssi=="")
-                rssi =  Integer.toString(device.getRSSI());
-            else
-                rssi +=  " ,"+Integer.toString(device.getRSSI()) ;
-
+            if(onlyiTags && address.contains("FF:FF:") || !onlyiTags) {
+                if (name == "")
+                    name = '"' + device.getName() + '"';
+                else
+                    name += " ," + '"' + device.getName() + '"';
+                if (address == "")
+                    address = '"' + device.getAddress() + '"';
+                else
+                    address += " ," + '"' + device.getAddress() + '"';
+                if (rssi == "")
+                    rssi = Integer.toString(device.getRSSI());
+                else
+                    rssi += " ," + Integer.toString(device.getRSSI());
+            }
         }
         String nearbyBluetoothDevices ="";
         if(address.length()<1700)
@@ -292,17 +293,24 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
        return nearbyBluetoothDevices;
     }
 
+    private String prepareNearbyluetoothDevices(boolean onlyiTags){
+        String nearbyBluetoothDevices = getNearbyBluetoothDevices(onlyiTags);
+        return "{"+nearbyBluetoothDevices+"}";
+    }
+
     private String getAllExternalAttributes(){
         String allExternalAttribute = "[";
         getUserPreferences();
+        //if attributes from files is longer then xxx  then only adress in FF
         if(scanNearbyBluetoothDevices) {
-            String nearbyBluetoothDevices = getNearbyBluetoothDevices();
-            allExternalAttribute += "{"+nearbyBluetoothDevices+"}";
+            allExternalAttribute += prepareNearbyluetoothDevices(false);
             //allExternalAttribute += "nearbyBluetoothDevices"+'"'+":{"+nearbyBluetoothDevices+"}";
             //Toast.makeText(context, "nearbyBluetoothDevices: " + nearbyBluetoothDevices, Toast.LENGTH_LONG).show();
         }
         if(readAttributeFromFile) {
             String externalAttributeFromFile = getExternalAttributesFromFile();
+            if(allExternalAttribute.length()+externalAttributeFromFile.length()>1900 && scanNearbyBluetoothDevices)
+                allExternalAttribute = "["+prepareNearbyluetoothDevices(true);
             if(allExternalAttribute != "")
                 allExternalAttribute +=",";
             allExternalAttribute +=" {" + externalAttributeFromFile + "}";
