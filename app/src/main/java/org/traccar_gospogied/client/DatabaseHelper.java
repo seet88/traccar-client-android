@@ -97,6 +97,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void insertPosition(Position position, String externalAttributes) {
+        if(externalAttributes.length()>1800)
+            externalAttributes = externalAttributes.substring(0, 1800);
         ContentValues values = new ContentValues();
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
@@ -108,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("accuracy", position.getAccuracy());
         values.put("battery", position.getBattery());
         values.put("mock", position.getMock() ? 1 : 0);
-        values.put("extAttribute", externalAttributes.substring(0, 1800));
+        values.put("extAttribute", externalAttributes);
 
         db.insertOrThrow("position", null, values);
     }
