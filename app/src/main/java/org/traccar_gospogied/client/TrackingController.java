@@ -113,6 +113,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         try {
             positionProvider.stopUpdates();
             stopBluetoothScan=true;
+            andruinoBTExchanger.closeConnectionToAndruino();
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }

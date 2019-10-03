@@ -107,7 +107,16 @@ public class AndruinoBTExchanger {
         }
         return  device.createRfcommSocketToServiceRecord(MY_UUID);
     }
+    public void closeConnectionToAndruino(){
+        if(btSocket != null){
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                errorExit("Fatal Error", "Cannot close connection " + e.getMessage() + ".");
+            }
 
+        }
+    }
     private void createConnectThreat(){
 
 
