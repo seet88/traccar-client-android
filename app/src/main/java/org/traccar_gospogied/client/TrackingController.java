@@ -49,6 +49,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private DatabaseHelper databaseHelper;
     private NetworkManager networkManager;
     private BluetoothController bluetoothController;
+    private AndruinoBTExchanger andruinoBTExchanger;
 
     private PowerManager.WakeLock wakeLock;
 
@@ -78,6 +79,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         databaseHelper = new DatabaseHelper(context);
         networkManager = new NetworkManager(context, this);
         bluetoothController = new BluetoothController(context);
+        andruinoBTExchanger = new AndruinoBTExchanger(context);
         isOnline = networkManager.isOnline();
 
         url = preferences.getString(MainFragment.KEY_URL, context.getString(R.string.settings_url_default_value));
@@ -98,6 +100,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 stopBluetoothScan = false;
 
                 startBluetoothScan();
+                startAndruinoComunication();
             }
         } catch (SecurityException e) {
             Log.w(TAG, e);
@@ -240,6 +243,13 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             }
         }, RETRY_DELAY);
     }
+
+    private void startAndruinoComunication(){
+        //first scan on start then loop with delay
+        andruinoBTExchanger.initSomethink();
+
+    }
+
 
     private void startBluetoothScan(){
         //first scan on start then loop with delay
