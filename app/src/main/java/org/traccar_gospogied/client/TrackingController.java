@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -161,6 +162,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         log("write", position);
         lock();
         String externalAttributes = getAllExternalAttributes();
+
+        Toast.makeText(context, "from andruino:" + andruinoBTExchanger.andruinoMessage,
+                Toast.LENGTH_LONG).show();
         databaseHelper.insertPositionAsync(position, externalAttributes ,new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {

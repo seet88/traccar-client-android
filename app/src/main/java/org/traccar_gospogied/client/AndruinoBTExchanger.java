@@ -29,6 +29,7 @@ public class AndruinoBTExchanger {
     private Context context;
     private SharedPreferences preferences;
     public Handler h;
+    public String andruinoMessage = "zzz";
 
     private ConnectedThread mConnectedThread;
 
@@ -64,8 +65,9 @@ public class AndruinoBTExchanger {
                         if (endOfLineIndex > 0) {                                            // if end-of-line,
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
-                            Toast.makeText(context, "sbprint:" + sbprint,
-                                    Toast.LENGTH_LONG).show();            // update TextView
+                           // Toast.makeText(context, "sbprint:" + sbprint,
+                           //         Toast.LENGTH_LONG).show();            // update TextView
+                            andruinoMessage=sbprint;
                         }
                         Log.i(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
                         break;
@@ -83,6 +85,9 @@ public class AndruinoBTExchanger {
                 Toast.LENGTH_LONG).show();
     }
 
+    public String getAndruinoMessage(){
+        return andruinoMessage;
+    }
 
     private String pairedDevicesList(){
         for (BluetoothDevice pairedDevice : btAdapter.getBondedDevices()) {
