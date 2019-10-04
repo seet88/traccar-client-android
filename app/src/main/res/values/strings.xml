@@ -59,7 +59,8 @@
   <string name="settings_scanBTEveryMinutes_summary">How often run scanning (minutes)</string>
   <string name="settings_scanBTEveryMinutes_title">BT scan delay time</string>
   <string name="settings_scanningBTTime_summary">How long is scanning running (sec)</string>
-  <string name="settings_communicateWithArduino_summary_off">Don't communicate arduino</string>
+    <string name="settings_scanningBTTime_title">BT scanning time</string>
+  <string name="settings_communicateWithArduino_summary_off">Dont communicate arduino</string>
   <string name="settings_communicateWithArduino_summary_on">Communicate arduino</string>
   <string name="settings_communicateWithArduino_off">false</string>
   <string name="settings_communicateWithArduino_on">true</string>
