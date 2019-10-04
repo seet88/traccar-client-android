@@ -64,6 +64,7 @@ public class MainFragment extends PreferenceFragment implements OnSharedPreferen
     public static final String KEY_SCAN_NEARBY_BT_DEVICES = "scanNearbyBTDevices";
     public static final String KEY_SCAN_BT_EVERY_MINUTES = "scanBTEveryMinutes";
     public static final String KEY_SCANNING_BT_TIME = "scanningBTTime";
+    public static final String KEY_COMMUNICATE_WITH_ARDUINO = "communicateWithArduino";
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
@@ -178,6 +179,7 @@ public class MainFragment extends PreferenceFragment implements OnSharedPreferen
         findPreference(KEY_SCAN_NEARBY_BT_DEVICES).setEnabled(enabled);
         findPreference(KEY_SCAN_BT_EVERY_MINUTES).setEnabled(enabled);
         findPreference(KEY_SCANNING_BT_TIME).setEnabled(enabled);
+        findPreference(KEY_COMMUNICATE_WITH_ARDUINO).setEnabled(enabled);
 
     }
 

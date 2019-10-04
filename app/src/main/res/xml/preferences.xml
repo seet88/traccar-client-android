@@ -88,4 +88,14 @@
         android:summary="@string/settings_scanningBTTime_summary"
         android:title="@string/settings_scanningBTTime_title" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="communicateWithArduino"
+        android:summaryOff="@string/settings_communicateWithArduino_summary_off"
+        android:summaryOn="@string/settings_communicateWithArduino_summary_on"
+        android:switchTextOff="@string/settings_communicateWithArduino_off"
+        android:switchTextOn="@string/settings_communicateWithArduino_on"
+        android:title="@string/settings_communicateWithArduino_title" />
+
+
 </PreferenceScreen>

@@ -3,7 +3,6 @@ package org.traccar_gospogied.client;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
@@ -18,18 +17,18 @@ import java.util.UUID;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
-public class AndruinoBTExchanger {
+public class ArduinoBTExchanger {
 
     private final static String TAG = MainActivity.class.getSimpleName();
     final int RECIEVE_MESSAGE = 1;        // Status  for Handler
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private StringBuilder sb = new StringBuilder();
-    private String bTAndruinoName = "HC-05";
+    private String bTArduinoName = "HC-05";
     private Context context;
     private SharedPreferences preferences;
     public Handler h;
-    public String andruinoMessage = "zzz";
+    public String messageFromArduino = "zzz";
 
     private ConnectedThread mConnectedThread;
 
@@ -39,7 +38,7 @@ public class AndruinoBTExchanger {
     // MAC-address of Bluetooth module (you must edit this line)
     private static String address = "98:D3:91:FD:7A:CA";
 
-    public AndruinoBTExchanger(Context context) {
+    public ArduinoBTExchanger(Context context) {
         this.context = context;
 
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -53,7 +52,7 @@ public class AndruinoBTExchanger {
 
 
 
-    public void initSomethink() {
+    public void tryCommunicate() {
         h = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
@@ -67,7 +66,7 @@ public class AndruinoBTExchanger {
                             sb.delete(0, sb.length());                                      // and clear
                            // Toast.makeText(context, "sbprint:" + sbprint,
                            //         Toast.LENGTH_LONG).show();            // update TextView
-                            andruinoMessage=sbprint;
+                            messageFromArduino =sbprint;
                         }
                         Log.i(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
                         break;
@@ -77,7 +76,7 @@ public class AndruinoBTExchanger {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
-        address = pairedDevicesList(); //fill address with paired andruino BT device
+        address = pairedDevicesList(); //fill address with paired arduino BT device
         Toast.makeText(context, "adress" + address,
                 Toast.LENGTH_LONG).show();
         createConnectThreat();
@@ -85,13 +84,13 @@ public class AndruinoBTExchanger {
                 Toast.LENGTH_LONG).show();
     }
 
-    public String getAndruinoMessage(){
-        return andruinoMessage;
+    public String getMessageFromArduino(){
+        return messageFromArduino;
     }
 
     private String pairedDevicesList(){
         for (BluetoothDevice pairedDevice : btAdapter.getBondedDevices()) {
-            if (pairedDevice.getName().contains(bTAndruinoName)) {
+            if (pairedDevice.getName().contains(bTArduinoName)) {
                 Log.i(TAG, "\tDevice Name: " +  pairedDevice.getName());
                 Log.i(TAG, "\tDevice MAC: " + pairedDevice.getAddress());
 
@@ -112,7 +111,7 @@ public class AndruinoBTExchanger {
         }
         return  device.createRfcommSocketToServiceRecord(MY_UUID);
     }
-    public void closeConnectionToAndruino(){
+    public void closeConnectionToArduino(){
         if(btSocket != null){
             try {
                 btSocket.close();

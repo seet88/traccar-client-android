@@ -21,7 +21,6 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -50,7 +49,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private DatabaseHelper databaseHelper;
     private NetworkManager networkManager;
     private BluetoothController bluetoothController;
-    private AndruinoBTExchanger andruinoBTExchanger;
+    private ArduinoBTExchanger arduinoBTExchanger;
 
     private PowerManager.WakeLock wakeLock;
 
@@ -61,6 +60,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private String externalAttributeFilePath = "";
     private boolean scanNearbyBluetoothDevices = false;
     private int scanBluetoothEveryMinutes = 1;
+    private boolean communicateWithArduino = false;
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -80,7 +80,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         databaseHelper = new DatabaseHelper(context);
         networkManager = new NetworkManager(context, this);
         bluetoothController = new BluetoothController(context);
-        andruinoBTExchanger = new AndruinoBTExchanger(context);
+        arduinoBTExchanger = new ArduinoBTExchanger(context);
         isOnline = networkManager.isOnline();
 
         url = preferences.getString(MainFragment.KEY_URL, context.getString(R.string.settings_url_default_value));
@@ -101,7 +101,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 stopBluetoothScan = false;
 
                 startBluetoothScan();
-                startAndruinoComunication();
+                startArduinoComunication();
             }
         } catch (SecurityException e) {
             Log.w(TAG, e);
@@ -114,7 +114,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         try {
             positionProvider.stopUpdates();
             stopBluetoothScan=true;
-            andruinoBTExchanger.closeConnectionToAndruino();
+            arduinoBTExchanger.closeConnectionToArduino();
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }
@@ -163,8 +163,6 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         lock();
         String externalAttributes = getAllExternalAttributes();
 
-        Toast.makeText(context, "from andruino:" + andruinoBTExchanger.andruinoMessage,
-                Toast.LENGTH_LONG).show();
         databaseHelper.insertPositionAsync(position, externalAttributes ,new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {
@@ -249,12 +247,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         }, RETRY_DELAY);
     }
 
-    private void startAndruinoComunication(){
+    private void startArduinoComunication(){
         //first scan on start then loop with delay
-        andruinoBTExchanger.initSomethink();
+        arduinoBTExchanger.tryCommunicate();
 
     }
-
 
     private void startBluetoothScan(){
         //first scan on start then loop with delay
@@ -313,6 +310,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         return "{"+nearbyBluetoothDevices+"}";
     }
 
+    private String getArduinoAttributes(){
+        String attribute = arduinoBTExchanger.messageFromArduino;
+        return attribute;
+    }
+
     private String getAllExternalAttributes(){
         String allExternalAttribute = "[";
         getUserPreferences();
@@ -330,6 +332,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 allExternalAttribute +=",";
             allExternalAttribute +=" {" + externalAttributeFromFile + "}";
             //allExternalAttribute +="externalAttributeFromFile"+'"'+": {" + externalAttributeFromFile + "}";
+        }
+        if(communicateWithArduino){
+            String externalAttributeFromArduino = getArduinoAttributes();
+            allExternalAttribute += " {" + externalAttributeFromArduino + "}";
         }
         allExternalAttribute += "]";
         return allExternalAttribute;
@@ -376,7 +382,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             scanNearbyBluetoothDevices = true;
         else
             scanNearbyBluetoothDevices = false;
-
+        if(preferences.getBoolean(MainFragment.KEY_COMMUNICATE_WITH_ARDUINO,true))
+            communicateWithArduino = true;
+        else
+            communicateWithArduino = false;
         scanBluetoothEveryMinutes = Integer.parseInt(preferences.getString(MainFragment.KEY_SCAN_BT_EVERY_MINUTES, "10"));
         externalAttributeFilePath = preferences.getString(MainFragment.KEY_FILEPATH, "");
     }
