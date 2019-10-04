@@ -99,10 +99,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             positionProvider.startUpdates();
             if(scanNearbyBluetoothDevices) {
                 stopBluetoothScan = false;
-
                 startBluetoothScan();
-                startArduinoComunication();
             }
+            if(communicateWithArduino)
+                startArduinoComunication();
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }
@@ -328,13 +328,15 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             String externalAttributeFromFile = getExternalAttributesFromFile();
             if(allExternalAttribute.length()+externalAttributeFromFile.length()>1900 && scanNearbyBluetoothDevices)
                 allExternalAttribute = "["+prepareNearbyluetoothDevices(true);
-            if(allExternalAttribute != "")
+            if(allExternalAttribute.length()>5)
                 allExternalAttribute +=",";
             allExternalAttribute +=" {" + externalAttributeFromFile + "}";
             //allExternalAttribute +="externalAttributeFromFile"+'"'+": {" + externalAttributeFromFile + "}";
         }
         if(communicateWithArduino){
             String externalAttributeFromArduino = getArduinoAttributes();
+            if(allExternalAttribute.length()>5)
+                allExternalAttribute +=",";
             allExternalAttribute += " {" + externalAttributeFromArduino + "}";
         }
         allExternalAttribute += "]";

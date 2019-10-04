@@ -28,7 +28,7 @@ public class ArduinoBTExchanger {
     private Context context;
     private SharedPreferences preferences;
     public Handler h;
-    public String messageFromArduino = "zzz";
+    public String messageFromArduino = "";
 
     private ConnectedThread mConnectedThread;
 
@@ -68,7 +68,7 @@ public class ArduinoBTExchanger {
                            //         Toast.LENGTH_LONG).show();            // update TextView
                             messageFromArduino =sbprint;
                         }
-                        Log.i(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
+                        //Log.i(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
                         break;
                 }
             };
@@ -77,11 +77,9 @@ public class ArduinoBTExchanger {
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
         address = pairedDevicesList(); //fill address with paired arduino BT device
-        Toast.makeText(context, "adress" + address,
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "adress" + address, Toast.LENGTH_LONG).show();
         createConnectThreat();
-        Toast.makeText(context, "after createTreat",
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "after createTreat",Toast.LENGTH_LONG).show();
     }
 
     public String getMessageFromArduino(){
@@ -91,8 +89,8 @@ public class ArduinoBTExchanger {
     private String pairedDevicesList(){
         for (BluetoothDevice pairedDevice : btAdapter.getBondedDevices()) {
             if (pairedDevice.getName().contains(bTArduinoName)) {
-                Log.i(TAG, "\tDevice Name: " +  pairedDevice.getName());
-                Log.i(TAG, "\tDevice MAC: " + pairedDevice.getAddress());
+                //Log.i(TAG, "\tDevice Name: " +  pairedDevice.getName());
+                //Log.i(TAG, "\tDevice MAC: " + pairedDevice.getAddress());
 
                 return pairedDevice.getAddress();
             }
