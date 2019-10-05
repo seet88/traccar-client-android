@@ -114,7 +114,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         try {
             positionProvider.stopUpdates();
             stopBluetoothScan=true;
-            arduinoBTExchanger.closeConnectionToArduino();
+            if(communicateWithArduino)
+                arduinoBTExchanger.closeConnectionToArduino();
         } catch (SecurityException e) {
             Log.w(TAG, e);
         }
@@ -162,6 +163,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         log("write", position);
         lock();
         String externalAttributes = getAllExternalAttributes();
+        if(communicateWithArduino && arduinoBTExchanger.isConnectionLost){
+            StatusActivity.addMessage("recconect to Andruino");
+            arduinoBTExchanger.tryCommunicate();
+        }
 
         databaseHelper.insertPositionAsync(position, externalAttributes ,new DatabaseHelper.DatabaseHandler<Void>() {
             @Override

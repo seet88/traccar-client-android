@@ -29,6 +29,7 @@ public class ArduinoBTExchanger {
     private SharedPreferences preferences;
     public Handler h;
     public String messageFromArduino = "";
+    public boolean isConnectionLost = false;
 
     private ConnectedThread mConnectedThread;
 
@@ -57,18 +58,18 @@ public class ArduinoBTExchanger {
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
                     case RECIEVE_MESSAGE:                                                   // if receive massage
-                        byte[] readBuf = (byte[]) msg.obj;
+                       byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
                         sb.append(strIncom);                                                // append string
-                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
+                        int endOfLineIndex = sb.indexOf("Y");                            // determine the end-of-line
                         if (endOfLineIndex > 0) {                                            // if end-of-line,
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
-                           // Toast.makeText(context, "sbprint:" + sbprint,
-                           //         Toast.LENGTH_LONG).show();            // update TextView
                             messageFromArduino =sbprint;
-                        }
+                        }else
+                            Toast.makeText(context, "cos"+sb.substring(0, sb.length()-1),Toast.LENGTH_LONG).show();
                         //Log.i(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
+                         /**/
                         break;
                 }
             };
@@ -216,7 +217,13 @@ public class ArduinoBTExchanger {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
                     h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler --tmp
+                    isConnectionLost = false;
                 } catch (IOException e) {
+                    isConnectionLost = true;
+                    messageFromArduino = "";
+
+                    Toast.makeText(context, "cannot connect: "+e.getMessage(),Toast.LENGTH_LONG).show();
+
                     break;
                 }
             }
