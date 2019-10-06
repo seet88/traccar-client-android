@@ -30,6 +30,7 @@ public class ArduinoBTExchanger {
     public Handler h;
     public String messageFromArduino = "";
     public boolean isConnectionLost = false;
+    public  int  counter = 1;
 
     private ConnectedThread mConnectedThread;
 
@@ -54,6 +55,7 @@ public class ArduinoBTExchanger {
 
 
     public void tryCommunicate() {
+        Toast.makeText(context, "Uruchamiam tryComunicate" , Toast.LENGTH_LONG).show();   // update TextView
         h = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
@@ -65,9 +67,10 @@ public class ArduinoBTExchanger {
                         if (endOfLineIndex > 0) {                                            // if end-of-line,
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
-                             //Toast.makeText(context, "sbprint:" + sbprint,
-                            //         Toast.LENGTH_LONG).show();            // update TextView
-                            messageFromArduino =sbprint;
+                             //Toast.makeText(context, "sbprint:" + sbprint, Toast.LENGTH_LONG).show();   // update TextView
+                            counter ++;
+                            messageFromArduino = sbprint;
+                            messageFromArduino +=", "+ '"'+"hCounter"+'"'+":" + counter ;
                         }
                         //Log.i(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
                         break;
@@ -111,15 +114,24 @@ public class ArduinoBTExchanger {
         return  device.createRfcommSocketToServiceRecord(MY_UUID);
     }
     public void closeConnectionToArduino(){
+        Toast.makeText(context, "closeConnectionToArduino", Toast.LENGTH_LONG).show();   // update TextView
         if(btSocket != null){
             try {
+                Toast.makeText(context, "try close socket", Toast.LENGTH_LONG).show();
                 btSocket.close();
             } catch (IOException e) {
-                errorExit("Fatal Error", "Cannot close connection " + e.getMessage() + ".");
+                Toast.makeText(context, "fail close socket", Toast.LENGTH_LONG).show();
+                //errorExit("Fatal Error", "Cannot close connection " + e.getMessage() + ".");
             }
 
         }
     }
+
+    public boolean isConnectedTreadAlive(){
+        return mConnectedThread.isAlive();
+    }
+
+
     private void createConnectThreat(){
 
 

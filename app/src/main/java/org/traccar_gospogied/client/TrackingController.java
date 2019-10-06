@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,6 +62,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private boolean scanNearbyBluetoothDevices = false;
     private int scanBluetoothEveryMinutes = 1;
     private boolean communicateWithArduino = false;
+    private int tCounter = 1;
+    private int hCounterPrev = 0;
+    private boolean restartArduinoConnection = false;
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -163,9 +167,11 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         log("write", position);
         lock();
         String externalAttributes = getAllExternalAttributes();
-        if(communicateWithArduino && arduinoBTExchanger.isConnectionLost){
+
+        if(communicateWithArduino && (arduinoBTExchanger.isConnectionLost || restartArduinoConnection)){
             StatusActivity.addMessage("recconect to Andruino");
             arduinoBTExchanger.tryCommunicate();
+            restartArduinoConnection = false;
         }
 
         databaseHelper.insertPositionAsync(position, externalAttributes ,new DatabaseHelper.DatabaseHandler<Void>() {
@@ -255,7 +261,18 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private void startArduinoComunication(){
         //first scan on start then loop with delay
         arduinoBTExchanger.tryCommunicate();
-
+       /* Toast.makeText(context, "Is tread online: "+arduinoBTExchanger.isConnectedTreadAlive(), Toast.LENGTH_LONG).show();
+        final int restartAndroidBluetoothTimeInMinutes = 10;
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                arduinoBTExchanger.closeConnectionToArduino();
+                arduinoBTExchanger.tryCommunicate();
+                handler.postDelayed(this, restartAndroidBluetoothTimeInMinutes*1000*60);
+                if(stopBluetoothScan)
+                    handler.removeCallbacks(this);
+            }
+        }, restartAndroidBluetoothTimeInMinutes*1000*60);
+*/
     }
 
     private void startBluetoothScan(){
@@ -317,6 +334,22 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
 
     private String getArduinoAttributes(){
         String attribute = arduinoBTExchanger.messageFromArduino;
+        attribute +=", "+ '"'+"isConncetionLost"+'"'+":" + arduinoBTExchanger.isConnectionLost ;
+        attribute +=", "+ '"'+"Tread"+'"'+":" + arduinoBTExchanger.isConnectedTreadAlive() ;
+        tCounter ++;
+        attribute +=", "+ '"'+"tCounter"+'"'+":" + tCounter ;
+        if(hCounterPrev == arduinoBTExchanger.counter){
+            attribute +=", "+ '"'+"handlerFreezed"+'"'+":" + true ;
+            restartArduinoConnection = true;
+        }else {
+            attribute += ", " + '"' + "handlerFreezed" + '"' + ":" + false;
+            restartArduinoConnection = true;
+        }
+
+
+        attribute +=", "+ '"'+"hPrevCounter"+'"'+":" + hCounterPrev ;
+
+        hCounterPrev = arduinoBTExchanger.counter;
         return attribute;
     }
 
