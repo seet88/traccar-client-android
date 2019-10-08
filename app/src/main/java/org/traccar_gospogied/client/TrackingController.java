@@ -170,7 +170,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
 
         if(communicateWithArduino && (arduinoBTExchanger.isConnectionLost || restartArduinoConnection)){
             StatusActivity.addMessage("recconect to Andruino");
-            arduinoBTExchanger.tryCommunicate();
+            //arduinoBTExchanger.tryCommunicate();
             restartArduinoConnection = false;
         }
 

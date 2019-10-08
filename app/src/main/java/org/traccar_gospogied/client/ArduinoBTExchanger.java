@@ -30,6 +30,7 @@ public class ArduinoBTExchanger {
     public Handler h;
     public String messageFromArduino = "";
     public boolean isConnectionLost = false;
+    public boolean killBTSocket = false;
     public  int  counter = 1;
 
     private ConnectedThread mConnectedThread;
@@ -114,12 +115,12 @@ public class ArduinoBTExchanger {
         return  device.createRfcommSocketToServiceRecord(MY_UUID);
     }
     public void closeConnectionToArduino(){
-        Toast.makeText(context, "closeConnectionToArduino", Toast.LENGTH_LONG).show();   // update TextView
         if(btSocket != null){
             try {
-                Toast.makeText(context, "try close socket", Toast.LENGTH_LONG).show();
+                killBTSocket = true;
+                Thread.sleep(1000);
                 btSocket.close();
-            } catch (IOException e) {
+            } catch (Exception  e) {
                 Toast.makeText(context, "fail close socket", Toast.LENGTH_LONG).show();
                 //errorExit("Fatal Error", "Cannot close connection " + e.getMessage() + ".");
             }
@@ -224,7 +225,7 @@ public class ArduinoBTExchanger {
             int bytes; // bytes returned from read()
 
             // Keep listening to the InputStream until an exception occurs
-            while (true) {
+            while (true && !killBTSocket) {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
