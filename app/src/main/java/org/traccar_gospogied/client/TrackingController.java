@@ -168,9 +168,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         lock();
         String externalAttributes = getAllExternalAttributes();
 
-        if(communicateWithArduino && (arduinoBTExchanger.isConnectionLost || restartArduinoConnection)){
+        if(communicateWithArduino && (arduinoBTExchanger.isConnectionLost || restartArduinoConnection) && tCounter > 10){
             StatusActivity.addMessage("recconect to Andruino");
-            arduinoBTExchanger.tryCommunicate();
+            //arduinoBTExchanger.tryCommunicate();
             restartArduinoConnection = false;
         }
 

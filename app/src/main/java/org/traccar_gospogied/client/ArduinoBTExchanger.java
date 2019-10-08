@@ -30,6 +30,7 @@ public class ArduinoBTExchanger {
     public Handler h;
     public String messageFromArduino = "";
     public boolean isConnectionLost = false;
+    public boolean killBTSocect = false;
     public  int  counter = 1;
 
     private ConnectedThread mConnectedThread;
@@ -115,16 +116,28 @@ public class ArduinoBTExchanger {
     }
     public void closeConnectionToArduino(){
         Toast.makeText(context, "closeConnectionToArduino", Toast.LENGTH_LONG).show();   // update TextView
-        if(btSocket != null){
+      if(btSocket != null){
             try {
-                Toast.makeText(context, "try close socket", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "try close socket", Toast.LENGTH_LONG).show();
+               // btSocket.close();
+                killBTSocect=true;
+                Thread.sleep(4000);
+                mConnectedThread.closeIOStream();
+                Toast.makeText(context, "after closeIOStream", Toast.LENGTH_LONG).show();
+                //h.removeCallbacksAndMessages(null);
+               // Toast.makeText(context, "handler", Toast.LENGTH_LONG).show();
+                //mConnectedThread.interrupt();
+               //Toast.makeText(context, "thread", Toast.LENGTH_LONG).show();
                 btSocket.close();
-            } catch (IOException e) {
+                Toast.makeText(context, "socket", Toast.LENGTH_LONG).show();
+            }catch (Exception e ) {
                 Toast.makeText(context, "fail close socket", Toast.LENGTH_LONG).show();
                 //errorExit("Fatal Error", "Cannot close connection " + e.getMessage() + ".");
             }
 
         }
+          /**/
+        Toast.makeText(context, "closeConnectionToArduino done", Toast.LENGTH_LONG).show();   // update TextView
     }
 
     public boolean isConnectedTreadAlive(){
@@ -224,7 +237,7 @@ public class ArduinoBTExchanger {
             int bytes; // bytes returned from read()
 
             // Keep listening to the InputStream until an exception occurs
-            while (true) {
+            while (true && !killBTSocect) {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
@@ -247,6 +260,22 @@ public class ArduinoBTExchanger {
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
                 Log.d(TAG, "...Error data send: " + e.getMessage() + "...");
+            }
+        }
+
+        public void closeIOStream(){
+            if (mmInStream != null) {
+                try {mmInStream.close();
+                } catch (Exception e) {
+                    Toast.makeText(context, "failed close mmInStream", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            if (mmOutStream != null) {
+                try {mmOutStream.close();
+                } catch (Exception e){
+                    Toast.makeText(context, "failed close mmOutStream", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
